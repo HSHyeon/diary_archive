@@ -1,0 +1,19 @@
+div .todo-container{
+    width: 100px;
+    background-color: blue;
+    border: 1px solid;
+}
+.content {
+    width: 500px;
+    padding-inline: 10px;
+    height: 500px;
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.storyImage {
+    height: 500px;
+}

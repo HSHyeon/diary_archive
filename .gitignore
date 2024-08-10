@@ -39,3 +39,4 @@ next-env.d.ts
 # private data
 /public/media
 /public/stories.json
+/public/diary_entries.json

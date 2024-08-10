@@ -1,15 +1,41 @@
-// type 관련 정의는 해당 폴더에 작성합니다. 이 파일은 제거해도 됩니다.
-export interface Question{
-    id: number,
-    text : string
+import surveyReducer from "../store/reducer";
+
+interface InputFormProps {
+  onSubmit: (text: string) => void;
 }
 
-export const ADD_QUESTION = 'ADD_QUESTION'
-
- interface AddQuestionAction {
-    type: typeof ADD_QUESTION,
-    payload: Question
+export interface Item {
+  title: string;
+  id: number;
+  date: number;
 }
 
-export const QuestionActionTypes = AddQuestionAction
-export const RootState = Question;
+export interface TodoState {
+  items: Item[];
+}
+
+export const ADD_ITEM = "ADD_ITEM";
+export const DELETE_ITEM = "DELETE_ITEM";
+export const UPDATE_ITEM = "UPDATE_ITEM";
+
+interface AddItemAction {
+  type: typeof ADD_ITEM;
+  payload: Item;
+}
+
+interface UpdateItemAction {
+  type: typeof UPDATE_ITEM;
+  payload: Item;
+}
+interface DeleteItemAction {
+  type: typeof DELETE_ITEM;
+  payload: number;
+}
+
+
+export type TodosActionTypes =
+  | AddItemAction
+  | UpdateItemAction
+  | DeleteItemAction;
+
+export type RootState = TodoState;
