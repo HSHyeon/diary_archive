@@ -4,8 +4,6 @@ div .todo-container{
     border: 1px solid;
 }
 .content {
-    width: 500px;
-    padding-inline: 20px;
     height: 500px;
     background-color: black;
     color: white;

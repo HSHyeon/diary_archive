@@ -1,6 +1,5 @@
 import { NextPage, GetStaticProps } from "next";
 import Link from "next/link";
-import styles from "./index.module.css";
 import StoryComp from "../src/components/StoryComp";
 
 interface IgStory {
@@ -21,9 +20,9 @@ const Home: NextPage<Props> = ({ igStories }) => {
   return (
     <>
       <Link href="/add">
-        <a className={styles.addButton}>추가하기</a>
+        <a className="addButton">추가하기</a>
       </Link>
-      <div className={styles.storyList}>
+      <div className="storyList">
         {igStories.map((story) => (
           <StoryComp story={story} key={story.creation_timestamp} />
         ))}
