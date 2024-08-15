@@ -1,0 +1,5 @@
+arrowParens   = 'avoid' # 괄호 없는 화살표 함수를 선호합니다.
+endOfLine     = 'auto'  # 기존 줄 끝 유지
+semi          = true    # 세미콜론을 사용합니다.
+singleQuote   = true    # 작은따옴표를 선호합니다.
+trailingComma = 'es5'   # 형상 관리 친화적 콤마 사용을 선호합니다.

@@ -11,7 +11,8 @@ div .todo-container{
     text-align: center;
     align-items: center;
     justify-content: center;
-    line-height: 1.4rem;
+    line-height: 1.2rem;
+    overflow: auto;
 }
 
 .storyImage {
