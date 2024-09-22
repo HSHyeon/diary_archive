@@ -35,8 +35,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-
 # private data
 /public/media
-/public/stories.json
-/public/diary_entries.json
+
+db.json
+
+# 환경 변수
+.env

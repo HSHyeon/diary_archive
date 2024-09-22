@@ -1,5 +1,6 @@
 import { NextPage, GetStaticProps } from "next";
 import StoryComp from "../src/components/StoryComp";
+import styled from "styled-components";
 
 interface IgStory {
   uri: string;
@@ -19,23 +20,26 @@ const Home: NextPage<Props> = ({ igStories }) => {
   return (
     <>
       <div className="storyList">
-        {igStories.map((story) => (
-          <StoryComp story={story} key={story.creation_timestamp} />
-        ))}
+        <FilmContainer>
+          {igStories.map((story) => (
+            <StoryComp story={story} key={story.creation_timestamp} />
+          ))}
+        </FilmContainer>
       </div>
     </>
   );
 };
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const res1 = await fetch("http://localhost:3000/stories.json");
-  const res2 = await fetch("http://localhost:3000/diary_entries.json");
+  const BACKEND_URL = process.env.BACKEND_URL;
+  const res1 = await fetch(`${BACKEND_URL}/ig_stories`);
+  const res2 = await fetch(`${BACKEND_URL}/diaries`);
 
   const data1 = await res1.json();
   const data2 = await res2.json();
 
   // Combine the data from both files
-  const data: IgStory[] = [...data1.ig_stories, ...data2.diaries];
+  const data: IgStory[] = [...data1, ...data2];
 
   // Sort the combined data by creation_timestamp
   const sortedData = data.sort(
@@ -50,3 +54,9 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 };
 
 export default Home;
+
+const FilmContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
