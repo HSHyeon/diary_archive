@@ -1,22 +1,19 @@
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { NextPage, GetStaticProps } from "next";
 import StoryComp from "../src/components/StoryComp";
 import styled from "styled-components";
+import { fetchDiaries } from "../src/store/actions";
+import { IgStory, RootState } from "../src/types";
 
-interface IgStory {
-  uri: string;
-  creation_timestamp: number;
-  title: string;
-  text: string;
-  cross_post_source: {
-    source_app: string;
-  };
-}
+const Home: NextPage = () => {
+  const dispatch = useDispatch();
+  const igStories: IgStory[] = useSelector((state: RootState) => state.items);
+console.log(igStories)
+  useEffect(() => {
+    dispatch(fetchDiaries()); // 백엔드에서 데이터를 가져오는 액션
+  }, [dispatch]);
 
-interface Props {
-  igStories: IgStory[];
-}
-
-const Home: NextPage<Props> = ({ igStories }) => {
   return (
     <>
       <div className="storyList">
@@ -28,24 +25,6 @@ const Home: NextPage<Props> = ({ igStories }) => {
       </div>
     </>
   );
-};
-
-export const getStaticProps: GetStaticProps<Props> = async () => {
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const res = await fetch(`${BACKEND_URL}/diaries`);
-
-  const data: IgStory[] = await res.json();
-
-  // Sort the combined data by creation_timestamp
-  const sortedData = data.sort(
-    (a, b) => b.creation_timestamp - a.creation_timestamp
-  );
-
-  return {
-    props: {
-      igStories: sortedData,
-    },
-  };
 };
 
 export default Home;

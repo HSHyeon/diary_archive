@@ -1,36 +1,30 @@
-import { ADD_ITEM, DELETE_ITEM, TodoState, TodosActionTypes, UPDATE_ITEM } from "../types/index.d";
+import { DiaryActionTypes, IgStory , ADD_DIARY, FETCH_DIARIES, REMOVE_DIARY } from "../types";
 
-const initialState: TodoState = {
-  items: [],
+const initialState: { items: IgStory[] } = {
+  items: [], // 빈 배열로 초기화
 };
 
-const todoReducer = (
+export const diaryReducer = (
   state = initialState,
-  action: TodosActionTypes
-): TodoState => {
+  action: DiaryActionTypes
+): { items: IgStory[] } => {
   switch (action.type) {
-    case ADD_ITEM:
+    case FETCH_DIARIES:
       return {
         ...state,
-        items: [...state.items, action.payload],
+        items: action.payload, // action.payload는 IgStory[] 타입으로 가정
       };
-    case UPDATE_ITEM:
+    case ADD_DIARY:
       return {
         ...state,
-        items: state.items.map((item) =>
-          item.id === action.payload.id ? action.payload : item
-        ),
+        items: [...state.items, action.payload], // action.payload는 IgStory 타입
       };
-    case DELETE_ITEM:
+    case REMOVE_DIARY:
       return {
         ...state,
-        items: state.items.filter(
-          (question) => question.id != action.payload
-        ),
+        items: state.items.filter((item) => item.id !== action.payload.id),
       };
     default:
       return state;
   }
 };
-
-export default todoReducer;

@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-
-interface IgStory {
-  uri: string;
-  creation_timestamp: number;
-  title: string;
-  text: string;
-  cross_post_source: {
-    source_app: string;
-  };
-}
+import { useDispatch } from "react-redux";
+import { IgStory } from "../types";
+import { removeDiary } from "../store/actions";
+import { AppDispatch } from "../store";
 
 interface StoryComponentProps {
   story: IgStory;
 }
+
 const StoryComp = ({ story }: StoryComponentProps) => {
   const [isValid, setIsValid] = useState(true);
+  const dispatch: AppDispatch = useDispatch();
 
   const handleError = () => {
     setIsValid(false);
+  };
+
+  const handleDelete = () => {
+    console.log("삭제", story.id);
+    dispatch(removeDiary(story.id)); // 삭제 액션 디스패치
   };
 
   useEffect(() => {
@@ -30,13 +31,18 @@ const StoryComp = ({ story }: StoryComponentProps) => {
   if (!isValid) {
     return null;
   }
+
   const fileExtension = story.uri ? story.uri.split(".").pop() : "";
-  const formattedDate = new Date(story.creation_timestamp * 1000).toLocaleString(); 
+  const formattedDate = new Date(
+    story.creation_timestamp * 1000
+  ).toLocaleString();
 
   return (
     <>
       <FilmStrip>
         <FilmFrame>
+          <DeleteButton onClick={handleDelete}>삭제</DeleteButton>{" "}
+          {/* 삭제 버튼 */}
           <div key={story.uri}>
             <Content>
               {story.uri ? (
@@ -83,23 +89,40 @@ const Content = styled.div`
   line-height: 1.2rem;
   overflow: auto;
   min-height: 30rem;
-  p{
+  p {
     padding: 1rem;
   }
 `;
+
 const StoryImg = styled.img`
   width: 100%;
   height: auto;
   object-fit: contain;
 `;
+
 const StoryVideo = styled.video`
   width: 100%;
 `;
+
 const DateText = styled.p`
   font-size: 12px;
   text-align: end;
   color: #aaa;
-`
+`;
+
+const DeleteButton = styled.button`
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
 const FilmFrame = styled.div`
   border-radius: 5px;
   font-size: 18px;

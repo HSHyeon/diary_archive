@@ -1,6 +1,8 @@
-import { createStore } from "@reduxjs/toolkit";
-import todoReducer from "./reducer";
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import { diaryReducer } from './reducer';
 
-// 전역상태 관련 파일은 해당 폴더에 작성합니다. 이 파일은 제거해도 됩니다.
-const store = createStore(todoReducer);
+const store = createStore(diaryReducer, applyMiddleware(thunk));
+export type AppDispatch = typeof store.dispatch; 
+
 export default store;
