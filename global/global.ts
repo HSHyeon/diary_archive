@@ -13,11 +13,18 @@ const GlobalStyle = createGlobalStyle`
   body {
     box-sizing:border-box;
     font-family: "NotoSansKR", Arial, Helvetica, sans-serif;
+    color: #fff;
+    background-color: #000;
+  }
+
+  p{
+    line-height: 1.6;
+    font-size: 1rem;
   }
   
   a{
     text-decoration: none;
-    color: #000;
+    color: #fff;
   }
 `;
 

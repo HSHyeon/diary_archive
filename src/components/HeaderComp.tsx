@@ -19,11 +19,11 @@ export default HeaderComp;
 
 const Header = styled.header`
   display: flex;
-  background-color: ${({ theme }) => theme.colors.main};
-  height: 60px;
+  position: fixed;
   align-items: center;
+  z-index: 100;
   justify-content: space-between;
-  padding: 10px;
+  padding: 1rem;
   box-sizing: border-box;
   width: 100%;
 
