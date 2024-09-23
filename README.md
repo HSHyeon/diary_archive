@@ -3,11 +3,13 @@
 - 흑백만을 이용해서 대략적인 디자인을 진행할 예정입니다
 
 ![아이디어와이어프레임](https://github.com/user-attachments/assets/bbf9c78a-d2c9-47d9-8f51-b6d8f53d7ce5)
+달력은 영화 좌석표같이
+![image](https://github.com/user-attachments/assets/bff55bff-8ed1-4b1a-933e-815feccf17e7)
 
 ### 기술스택
-`next.js`, `react`, `styled-component`
+`next.js`, `react`, `styled-component`, `redux`, `TypeScript`
 - 백엔드 또한 next를 이용해 구현해볼 예정
-
+- 라이브러리 - `Fullcalendar`
 
 ### 대략적인 기능
 - 다운로드한 json 형식의 인스타그램의 스토리 기록을 뿌려주기
