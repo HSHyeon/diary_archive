@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { IgStory, RootState } from "../src/types";
 import { fetchDiaries } from "../src/store/actions";
+import StoryComp from "../src/components/StoryComp";
+import { format } from "date-fns";
 function calendar() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null); // 클릭된 날짜의 상태 저장
   const [diariesOnSelectedDate, setDiariesOnSelectedDate] = useState<any[]>([]); // 선택된 날짜의 일기
@@ -16,28 +19,26 @@ function calendar() {
   }, [dispatch]);
 
   const formatDate = (timestamp: number) => {
-    const date = new Date(timestamp * 1000); // Unix 타임스탬프는 밀리초로 변환 필요
-    return date.toLocaleDateString().split("T")[0]; // YYYY-MM-DD 형식 반환
+    const date = new Date(timestamp * 1000);
+    return format(date, "yyyy-MM-dd");
   };
-  // Redux에서 가져온 데이터를 FullCalendar 이벤트 형식으로 변환
-  const events = igStories.map((story) => ({
-    id: story.uri, // 각 데이터의 고유 URI를 id로 사용
-    title: "", // 일기의 제목
-    start: formatDate(story.creation_timestamp), // 변환된 날짜
-  }));
-  const handleDateClick = (info: any) => {
+
+  const handleDateClick = (info: { dateStr: string }) => {
     setSelectedDate(info.dateStr); // 클릭된 날짜 저장
     const filteredDiaries = igStories.filter(
       (story) => formatDate(story.creation_timestamp) === info.dateStr
     );
+
+    console.log(formatDate(igStories[0].creation_timestamp), info.dateStr);
     setDiariesOnSelectedDate(filteredDiaries); // 해당 날짜의 일기 리스트 설정
   };
+
   const eventDates = igStories.map((story) =>
     formatDate(story.creation_timestamp)
   );
 
   const handleDayCellClassNames = (arg: { date: Date }) => {
-    const dateStr = arg.date.toLocaleDateString().split("T")[0]; // YYYY-MM-DD 형식으로 변환
+    const dateStr = format(arg.date, "yyyy-MM-dd"); // YYYY-MM-DD 형식으로 변환
     const filteredDiariesCount = eventDates.filter(
       (date) => date === dateStr
     ).length;
@@ -50,12 +51,49 @@ function calendar() {
   return (
     <CalendarWrapper>
       <FullCalendar
-        plugins={[dayGridPlugin]}
+        plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
+        headerToolbar={{
+          left: "prev",
+          center: "title",
+          right: "next",
+        }}
         height="auto"
-        events={events}
+        dateClick={handleDateClick}
         dayCellClassNames={handleDayCellClassNames}
       />
+      {selectedDate && (
+        <Modal>
+          <button className="close" onClick={() => setSelectedDate(null)}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              color="#fff"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+          <div className="contents">
+            {diariesOnSelectedDate.length > 0 ? (
+              <>
+                {diariesOnSelectedDate.map((story, index) => (
+                  <StoryComp story={story}></StoryComp>
+                ))}
+              </>
+            ) : (
+              <p>이 날짜에 일기가 없습니다.</p>
+            )}
+          </div>
+        </Modal>
+      )}
     </CalendarWrapper>
   );
 }
@@ -64,9 +102,10 @@ export default calendar;
 const CalendarWrapper = styled.div`
   .fc {
     min-width: 50vw;
-    width: 550px;
+    width: 30rem;
     margin: 0 auto;
-    box-sizing: content-box;
+    padding: 20px;
+    box-sizing: border-box;
     border: none;
   }
 
@@ -86,14 +125,15 @@ const CalendarWrapper = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 3.6rem;
-    height: 2.1rem;
+    width: 3.4rem;
+    height: 2.0rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: #6b6b6b;
     box-sizing: border-box;
+    border-radius: 0.1rem;
     border-top-right-radius: 1.2rem;
     border-top-left-radius: 1.2rem;
     z-index: 10; /* 다른 요소와 겹칠 때 위에 오도록 설정 */
@@ -103,12 +143,14 @@ const CalendarWrapper = styled.div`
   }
   /* 날짜 셀의 숫자 */
   .fc-daygrid-day-number {
-    color: #000000;
+    font-size: small;
+    font-weight: 400;
+
   }
 
   /* 주말이나 다른 월의 날짜를 회색 처리 */
   .fc-day-other .fc-daygrid-day-top {
-    background-color: #1a1a1a !important;
+    background-color: #535353 !important;
   }
 
   /* 오늘 날짜를 강조 */
@@ -124,14 +166,45 @@ const CalendarWrapper = styled.div`
     background-color: #000;
   }
   .highlight-day-1 .fc-daygrid-day-top {
-    background-color: rgba(255, 246, 162, 0.5); /* 1개 글의 경우 */
+    background-color: rgba(235, 255, 157, 0.5); /* 1개 글의 경우 */
   }
 
   .highlight-day-2 .fc-daygrid-day-top {
-    background-color: rgba(255, 246, 162, 0.7); /* 2개 글의 경우 */
+    background-color: rgba(235, 255, 157, 0.7); /* 2개 글의 경우 */
   }
 
   .highlight-day-3 .fc-daygrid-day-top {
-    background-color: rgba(255, 246, 162, 1); /* 3개 글의 경우 */
+    background-color: rgba(235, 255, 157, 1); /* 3개 글의 경우 */
+  }
+`;
+const Modal = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: #333;
+  transform: translate(-50%, -50%);
+  border: 1px solid #ccc;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+  .contents {
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: auto;
+    height: 500px;
+  }
+  .close {
+    align-self: end;
+    background: none; /* 배경 제거 */
+    border: none; /* 테두리 제거 */
+    padding: 10px; /* 패딩 제거 */
+    margin: 0; /* 마진 제거 */
+    cursor: pointer; /* 커서를 포인터로 변경 */
+    outline: none; /* 포커스 시 아웃라인 제거 */
   }
 `;
