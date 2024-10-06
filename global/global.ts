@@ -16,6 +16,10 @@ const GlobalStyle = createGlobalStyle`
     color: #fff;
     background-color: #000;
   }
+  
+  :root {
+    --fc-border-color: #000;
+  }
 
   p{
     line-height: 1.6;
