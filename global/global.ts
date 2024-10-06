@@ -15,9 +15,14 @@ const GlobalStyle = createGlobalStyle`
     font-family: "NotoSansKR", Arial, Helvetica, sans-serif;
     color: #fff;
     background-color: #000;
+    height: 100vh;
+    max-width: 800px;
+    margin: 0 auto;
+
   }
   
   :root {
+    background-color: #222;
     --fc-border-color: #000;
   }
 

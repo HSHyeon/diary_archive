@@ -103,6 +103,7 @@ const CalendarWrapper = styled.div`
   .fc {
     min-width: 50vw;
     width: 30rem;
+    max-width: 100%;
     margin: 0 auto;
     padding: 20px;
     box-sizing: border-box;
@@ -126,7 +127,7 @@ const CalendarWrapper = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     width: 3.4rem;
-    height: 2.0rem;
+    height: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -138,6 +139,20 @@ const CalendarWrapper = styled.div`
     border-top-left-radius: 1.2rem;
     z-index: 10; /* 다른 요소와 겹칠 때 위에 오도록 설정 */
   }
+
+  /* 작은 화면 (모바일) */
+  @media (max-width: 600px) {
+    .fc-daygrid-day-top {
+      width: 2.5rem;
+      height: 1.5rem;
+      border-top-right-radius: 0.7rem;
+      border-top-left-radius: 0.7rem;
+      font-size: 0.8rem; /* 텍스트 크기 조정 */
+    }
+    .fc-daygrid-day-frame {
+      height: 3rem;
+    }
+  }
   .fc-scrollgrid {
     border: none;
   }
@@ -145,7 +160,6 @@ const CalendarWrapper = styled.div`
   .fc-daygrid-day-number {
     font-size: small;
     font-weight: 400;
-
   }
 
   /* 주말이나 다른 월의 날짜를 회색 처리 */

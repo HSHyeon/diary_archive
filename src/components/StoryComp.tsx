@@ -83,6 +83,7 @@ const Content = styled.div`
   background-color: #b3b3b3;
   color: white;
   display: flex;
+  max-height: 90vh;
   text-align: center;
   align-items: center;
   justify-content: center;
@@ -130,7 +131,7 @@ const FilmFrame = styled.div`
 `;
 
 const FilmStrip = styled.div`
-  width: calc(100% - 2.4rem);
+  width: calc(100% - 3.4rem);
   position: relative;
   border-radius: 10px;
   display: flex;
@@ -152,10 +153,10 @@ const FilmStrip = styled.div`
   }
 
   &::before {
-    left: -1rem;
+    left: -1.2rem;
   }
 
   &::after {
-    right: -1rem;
+    right: -1.2rem;
   }
 `;
