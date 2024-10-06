@@ -59,7 +59,7 @@ const StoryComp = ({ story }: StoryComponentProps) => {
                 )
               ) : (
                 <p>
-                  {story.text.split("\n").map((line, index) => (
+                  {story.text?.split("\n").map((line, index) => (
                     <React.Fragment key={index}>
                       {index > 0 && <br />}
                       {line}
